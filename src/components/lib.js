@@ -6,6 +6,7 @@ import React from "react";
 import styled from "@emotion/styled/macro";
 import { FaSpinner } from "react-icons/fa";
 import { keyframes } from "@emotion/react";
+import { Link as RouterLink } from "react-router-dom";
 
 import { Dialog as ReachDialog } from "@reach/dialog";
 
@@ -93,12 +94,25 @@ Spinner.defaultProps = {
   "aria-label": "loading",
 };
 
+//link
+const Link = styled(RouterLink)({
+  color: colors.indigo,
+  ":hover": {
+    color: colors.indigoDarken10,
+    textDecoration: "underline",
+  },
+});
+
 function FullPageSpinner() {
   return (
     <div
       css={{
         fontSize: "4em",
         height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Spinner />
@@ -131,13 +145,34 @@ function ErrorMessage({ error, variant = "stacked", ...props }) {
     </div>
   );
 }
+
+function FullPageErrorFallback({ error }) {
+  return (
+    <div
+      role="alert"
+      css={{
+        color: colors.danger,
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <p>Uh oh... There's a problem. Try refreshing the app.</p>
+      <pre>{error.message}</pre>
+    </div>
+  );
+}
 export {
   Input,
   Button,
   FormGroup,
   Spinner,
   FullPageSpinner,
+  FullPageErrorFallback,
   CircleButton,
   Dialog,
   ErrorMessage,
+  Link,
 };

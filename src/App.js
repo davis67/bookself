@@ -10,6 +10,7 @@ import { UnauthenticatedApp } from "./unauthenticated-app";
 import { useAsync } from "./utils/hooks";
 import * as colors from "./styles/colors";
 import { client } from "./utils/api-client";
+import { BrowserRouter as Router } from "react-router-dom";
 
 async function getUser() {
   let user = null;
@@ -41,7 +42,10 @@ function App() {
   console.log(user);
   const login = (form) => auth.login(form).then((user) => setData(user));
   const register = (form) => auth.register(form).then((user) => setData(user));
-
+  const logout = () => {
+    auth.logout();
+    setData(null);
+  };
   if (isLoading || isIdle) {
     return <FullPageSpinner />;
   }
@@ -65,7 +69,9 @@ function App() {
   }
   if (isSuccess) {
     return user ? (
-      <AuthenticatedApp />
+      <Router>
+        <AuthenticatedApp user={user} logout={logout} />
+      </Router>
     ) : (
       <UnauthenticatedApp login={login} register={register} />
     );
