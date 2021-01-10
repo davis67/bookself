@@ -13,8 +13,9 @@ function useSafeDispatch(dispatch) {
     return () => (mounted.current = false);
   }, []);
 
-  return React.useCallback((...args) =>
-    mounted.current ? dispatch(...args) : void 0
+  return React.useCallback(
+    (...args) => (mounted.current ? dispatch(...args) : void 0),
+    [dispatch]
   );
 }
 
@@ -52,7 +53,7 @@ function useAsync(initialState) {
   );
 
   const setError = React.useCallback(
-    (error) => safeSetState({ data, status: "rejected" }),
+    (error) => safeSetState({ error, status: "rejected" }),
     [safeSetState]
   );
 
@@ -62,7 +63,7 @@ function useAsync(initialState) {
 
   const run = React.useCallback(
     (promise) => {
-      if (!promise || promise.then) {
+      if (!promise || !promise.then) {
         throw new Error(
           `The argument passed to useAsync().run must be a promise. Maybe a function that's passed isn't returning anything?`
         );
